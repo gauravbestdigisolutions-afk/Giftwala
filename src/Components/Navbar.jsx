@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Nav2 from "./nav2";
 import img22 from "../assets/image/giftbala.png"
+import Line from "./line";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -142,7 +142,7 @@ const Navbar = () => {
           onClick={() => setOpen(false)}
         ></div>
       )}
-      <Nav2/>
+      <Line/>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Nav2 = () => {
+const Line = () => {
   return (
     <div>
       {/* Bottom Category Bar */}
@@ -45,4 +45,4 @@ const Nav2 = () => {
   );
 };
 
-export default Nav2;
+export default Line;
