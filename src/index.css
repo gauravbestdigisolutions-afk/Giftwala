@@ -1,0 +1,57 @@
+/* Hover Dropdown */
+.hover-dropdown {
+  position: relative;
+}
+
+.hover-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  min-width: 200px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Show on hover */
+.hover-dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Dropdown item styling */
+.hover-dropdown .dropdown-menu div {
+  padding: 0.25rem 0;
+  cursor: pointer;
+}
+.hover-dropdown .dropdown-menu div:hover {
+  color: #0d6efd;
+}
+
+
+/* navbar */
+/* Hover dropdown functionality */
+.hover-dropdown {
+  position: relative;
+}
+
+.hover-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+.hover-dropdown:hover .dropdown-menu {
+  display: block;
+  z-index: 1000;
+  background-color: #fff;
+  min-width: 200px;
+  border-radius: 0.25rem;
+}
+.text{
+  background-color: #fff;
+  color: rgb(21, 21, 145);
+}
