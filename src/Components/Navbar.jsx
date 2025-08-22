@@ -3,7 +3,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import img22 from "../assets/image/giftbala.png"
-import Line from "./line";
+import Line from "../page/Line";
+
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
