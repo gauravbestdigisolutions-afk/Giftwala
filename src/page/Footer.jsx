@@ -1,5 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import img22 from "../assets/image/giftbala.png"
 
 const Footer = () => {
   return (
@@ -9,10 +10,10 @@ const Footer = () => {
 
           {/* About */}
           <div className="col-12 col-md-3 mb-4">
-            <h5 className="fw-bold">MyShop</h5>
-            <p>
-              Your one-stop shop for all your needs! Quality products, best deals, and excellent service.
-            </p>
+            <img src={img22} alt="" style={{
+              width:'50%'
+            }} />
+           
           </div>
 
           {/* Quick Links */}
@@ -39,9 +40,9 @@ const Footer = () => {
           {/* Contact Info */}
           <div className="col-12 col-md-3 mb-4">
             <h5 className="fw-bold">Contact Us</h5>
-            <p>Email: support@myshop.com</p>
-            <p>Phone: +91 1234567890</p>
-            <p>Address: 123, Main Street, Delhi, India</p>
+            <p>Email: Info@giftwalah.com</p>
+            <p>Phone: +91  9999368393</p>
+            <p>Adress HOUSE NO-23,GROUND FLOOR HOUSING BOARD COLONY SECTOR 18 FARIDABAD</p>
           </div>
 
         </div>

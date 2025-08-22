@@ -8,9 +8,12 @@ const About = () => {
         {/* Left: Image */}
         <div className="col-12 col-md-6 mb-4 mb-md-0">
           <img
-            src="https://www.printvenue.com/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1542744173-8e7e53415bb0%3Fq%3D80%26w%3D2070%26auto%3Dformat%26fit%3Dcrop%26ixlib%3Drb-4.0.3%26ixid%3DM3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%253D%253D&w=2048&q=75"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1F28AV4Eeww0AjrN1F6OoxcBc4jAxl5SXUg&s"
             alt="About Us"
             className="img-fluid rounded shadow"
+            style={{
+              width:"300px"
+            }}
           />
         </div>
 

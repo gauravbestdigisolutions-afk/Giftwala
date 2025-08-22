@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import About from "./About";
 import HeroSection from "../Components/HeroSection";
 
+
+
 const Home = () => {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
@@ -30,114 +32,76 @@ const Home = () => {
   };
 
   return (
-   <>
-   <HeroSection/>
-    <div className="container my-5">
-      {/* Info Section above Popular Products */}
-     <div className="d-flex justify-content-center flex-wrap text-center mb-5 gap-4">
-  <div className="card" style={{ width: "250px" }}>
-    <img
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-9FAwrEd4I0XsQDUBwEuLGJYkRqqPuJeWw&s"
-      alt=""
-      className="card-img-top"
-      style={{ height: "150px", objectFit: "cover" }}
-    />
-    <div className="card-body">
-      <h5 className="fw-bold">Speed</h5>
-      <p>Same day, next day and 3 hours rush printing. Specialities in 3 days</p>
-    </div>
-  </div>
-
-  <div className="card" style={{ width: "250px" }}>
-    <img
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj66I-fg4rYND4HtCPsVri46fhPsC4xPUv-w&s"
-      alt=""
-      className="card-img-top"
-      style={{ height: "150px", objectFit: "cover" }}
-    />
-    <div className="card-body">
-      <h5 className="fw-bold">Luxury</h5>
-      <p>Mix and match gorgeous oil color or white ink painting with a variety of paper options.</p>
-    </div>
-  </div>
-
-  <div className="card" style={{ width: "250px" }}>
-    <img
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5JyyhzGbaBUFveJspG8sVP4NFrcEfEgsOw&s"
-      alt=""
-      className="card-img-top"
-      style={{ height: "150px", objectFit: "cover" }}
-    />
-    <div className="card-body">
-      <h5 className="fw-bold">Guaranteed Satisfaction</h5>
-      <p>Print your heart out with confidence. We got you, pinky promise.</p>
-    </div>
-  </div>
-</div>
+    <>
+      <HeroSection />
+      <div className="container my-5">
+        {/* Info Section above Popular Products */}
 
 
-      {/* Popular Products Section */}
-      <h2 className="mb-4 fw-bold text-center">Popular Products</h2>
 
-      <div className="position-relative">
-        {/* Left Arrow */}
-        <button
-          className="btn position-absolute top-50 start-0 translate-middle-y"
-          style={{ zIndex: 10, backgroundColor: "#ff6b6b", color: "#fff", border: "none" }}
-          onClick={() => scroll("left")}
-          
-        >
-          &#8249;
-        </button>
+        {/* Popular Products Section */}
+        <h2 className="mb-4 fw-bold text-center">Popular Products</h2>
 
-        {/* Right Arrow */}
-        <button
-          className="btn position-absolute top-50 end-0 translate-middle-y"
-          style={{ zIndex: 10, backgroundColor: "#ff6b6b", color: "#fff", border: "none" }}
-          onClick={() => scroll("right")}
-        >
-          &#8250;
-        </button>
+        <div className="position-relative">
+          {/* Left Arrow */}
+          <button
+            className="btn position-absolute top-50 start-0 translate-middle-y"
+            style={{ zIndex: 10, backgroundColor: "#ff6b6b", color: "#fff", border: "none" }}
+            onClick={() => scroll("left")}
 
-        {/* Horizontal Scrollable Products */}
-        <div
-          ref={scrollRef}
-          className="d-flex gap-3 overflow-auto py-2"
-          style={{
-            scrollBehavior: "smooth",
-            padding: "0 50px",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          }}
-        >
-          {/* Hide scrollbar for Chrome/Safari */}
-          <style>
-            {`
+          >
+            &#8249;
+          </button>
+
+          {/* Right Arrow */}
+          <button
+            className="btn position-absolute top-50 end-0 translate-middle-y"
+            style={{ zIndex: 10, backgroundColor: "#ff6b6b", color: "#fff", border: "none" }}
+            onClick={() => scroll("right")}
+          >
+            &#8250;
+          </button>
+
+          {/* Horizontal Scrollable Products */}
+          <div
+            ref={scrollRef}
+            className="d-flex gap-3 overflow-auto py-2"
+            style={{
+              scrollBehavior: "smooth",
+              padding: "0 50px",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {/* Hide scrollbar for Chrome/Safari */}
+            <style>
+              {`
               div::-webkit-scrollbar {
                 display: none;
               }
             `}
-          </style>
+            </style>
 
-          {products.map((product, index) => (
-            <div key={index} className="card flex-shrink-0" style={{ width: "300px" }}>
-              <img src={product.img} className="card-img-top" alt={product.title} />
-              <div className="card-body text-center">
-                <h5 className="card-title">{product.title}</h5>
-                <p className="card-text text-primary fw-bold">{product.price}</p>
-                <button onClick={handleBuyNow} className="btn btn-primary">
-                  Buy Now
-                </button>
+            {products.map((product, index) => (
+              <div key={index} className="card flex-shrink-0" style={{ width: "300px" }}>
+                <img src={product.img} className="card-img-top" alt={product.title} />
+                <div className="card-body text-center">
+                  <h5 className="card-title">{product.title}</h5>
+                  <p className="card-text text-primary fw-bold">{product.price}</p>
+                  <button onClick={handleBuyNow} className="btn btn-primary">
+                    Buy Now
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+            
+          </div>
         </div>
+        
+        {/* About Section */}
+        <About />
       </div>
-
-      {/* About Section */}
-      <About />
-    </div>
-   </>
+    </>
   );
 };
 
