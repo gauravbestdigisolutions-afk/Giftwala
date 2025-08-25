@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import img22 from "../assets/image/giftbala.png"
+import img22 from "../assets/image/logo1.png"
 
 const Footer = () => {
   return (
@@ -11,8 +11,8 @@ const Footer = () => {
           {/* About */}
           <div className="col-12 col-md-3 mb-4">
             <img src={img22} alt="" style={{
-              width:'50%',
-              filter: "invert(1) brightness(2)"
+              width:'60%',
+             backgroundColor:"bg-dark"
             }} />
            
           </div>

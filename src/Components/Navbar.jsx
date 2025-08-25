@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaShoppingCart, FaUser, FaBars, FaTimes, FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import img22 from "../assets/image/giftbala.png";
+import img22 from "../assets/image/logo.png";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
