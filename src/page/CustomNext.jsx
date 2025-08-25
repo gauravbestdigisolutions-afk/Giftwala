@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom"; // ← for breadcrumb navigation
+import img1 from "../assets/prodcut/image1.png";
 
 const CustomNext = () => {
   const [quantity, setQuantity] = useState(1);
@@ -32,7 +33,7 @@ const CustomNext = () => {
         {/* Left: Product Image */}
         <div className="col-12 col-md-6 mb-4">
           <img
-            src="https://www.printvenue.com/_next/image?url=https%3A%2F%2Fprintvenue-templates.s3.ap-south-1.amazonaws.com%2Fstatic%2Fproduct%2F5xn6tmw~product-preview-l-1~512dfff0e45253.23389616%3Fresponse-content-disposition%3Dinline%26X-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Date%3D20250822T072216Z%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Expires%3D7199%26X-Amz-Credential%3DAKIA6GBMH3LDJYCFJTNP%252F20250822%252Fap-south-1%252Fs3%252Faws4_request%26X-Amz-Signature%3Deb4605084e9317097e18ed8fb90101afb8cfd003db41a7656ad2ad812731d704&w=1920&q=75"
+            src={img1}
             alt="Notebook"
             className="img-fluid rounded shadow"
           />

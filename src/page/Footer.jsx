@@ -23,7 +23,7 @@ const Footer = () => {
             <ul className="list-unstyled">
               <li><a href="/" className="text-white text-decoration-none">Home</a></li>
               <li><a href="/about" className="text-white text-decoration-none">About Us</a></li>
-              <li><a href="/products" className="text-white text-decoration-none">Products</a></li>
+              <li><a href="/privacy-policy" className="text-white text-decoration-none">Privacy Policy</a></li>
               <li><a href="/contact" className="text-white text-decoration-none">Contact</a></li>
             </ul>
           </div>
@@ -41,9 +41,9 @@ const Footer = () => {
           {/* Contact Info */}
           <div className="col-12 col-md-3 mb-4">
             <h5 className="fw-bold">Contact Us</h5>
-            <p>Email: Info@giftwalah.com</p>
-            <p>Phone: +91  9999368393</p>
-            <p>Adress HOUSE NO-23,GROUND FLOOR HOUSING BOARD COLONY SECTOR 18 FARIDABAD</p>
+            <p className="text-white">Email: Info@giftwalah.com</p>
+            <p className="text-white">Phone: +91  9999368393</p>
+            <p className="text-white">Adress HOUSE NO-23,GROUND FLOOR HOUSING BOARD COLONY SECTOR 18 FARIDABAD</p>
           </div>
 
         </div>
@@ -52,7 +52,7 @@ const Footer = () => {
 
         {/* Footer Bottom */}
         <div className="d-flex justify-content-between align-items-center pt-3">
-          <p className="mb-0">&copy; {new Date().getFullYear()} MyShop. All rights reserved.</p>
+          <p className="mb-0 text-white">&copy; {new Date().getFullYear()} MyShop. All rights reserved.</p>
           <div className="d-flex gap-3">
             <a href="#" className="text-white text-decoration-none">Facebook</a>
             <a href="#" className="text-white text-decoration-none">Instagram</a>

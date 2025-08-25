@@ -10,13 +10,8 @@ import img2 from "../assets/prodcut/image2.png";
 import img3 from "../assets/prodcut/image3.png";
 import img4 from "../assets/prodcut/image4.png";
 import img5 from "../assets/prodcut/image5.png";
-import img6 from "../assets/prodcut/image6.png";
-import img7 from "../assets/prodcut/image7.png";
-import img8 from "../assets/prodcut/image8.png";
-import img9 from "../assets/prodcut/image9.png";
-import Electronic from "./Electronic";
 
-const Home = () => {
+const Electronic = () => {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
 
@@ -27,10 +22,6 @@ const Home = () => {
     { title: "Embroidered Cap - Black", price: "₹19.99", img: img3 },
     { title: "White Formal Shirt", price: "₹49.99", img: img4 },
     { title: "Diary & Pen Combo", price: "₹59.99", img: img5 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img6 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img7 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img8 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img9 },
   ];
 
   const scroll = (direction) => {
@@ -106,10 +97,6 @@ const Home = () => {
           </div>
         </div>
 
-       
-
-
-
         {/* About Section */}
         <About />
       </div>
@@ -117,4 +104,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Electronic;

@@ -9,6 +9,9 @@ import Home from './page/Home';
 import About from './page/About';
 import Login from './page/Login';
 import Cart from './page/Cart';
+import Electronic from './page/Electronic';
+import Contact from './page/Contact';
+import PrivacyPolicy from './page/PrivacyPolicy';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,8 +26,11 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/customnext' element={<CustomNext />} />
         <Route path='/about' element={<About/>} />
+        <Route path='/contact' element={<Contact/>} />
+        <Route path='/privacy-policy' element={<PrivacyPolicy/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/cart' element={<Cart/>} />
+         <Route path='/electronic/:productName' element={<Electronic />} /> 
       </Routes>
 
       {/* Footer will show on every page */}
