@@ -12,6 +12,18 @@ import Cart from './page/Cart';
 import Electronic from './page/Electronic';
 import Contact from './page/Contact';
 import PrivacyPolicy from './page/PrivacyPolicy';
+import Whislist from './page/Whislist';
+import CheckOut from './page/CheckOut';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import SearchResults from './page/SearchResults';
+import Kitchen from './page/Kitchen';
+import Bags from './page/Bags';
+import Buds from './page/Buds';
+import Register from './page/Register';
+import BluetoothSpeakers from './page/BluetoothSpeakers';
+import Smartwatch from './page/Smartwatch';
+import GraphicsCards from './page/GraphicsCards';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -29,12 +41,25 @@ function App() {
         <Route path='/contact' element={<Contact/>} />
         <Route path='/privacy-policy' element={<PrivacyPolicy/>} />
         <Route path='/login' element={<Login/>} />
+        <Route path='/register' element={<Register/>} />
         <Route path='/cart' element={<Cart/>} />
+        <Route path='/checkout-page' element={<CheckOut/>} />
+        <Route path='/wishlist' element={<Whislist/>} />
          <Route path='/electronic/:productName' element={<Electronic />} /> 
+         <Route path='/kitchen' element={<Kitchen/>}/>
+         <Route path='/bags' element={<Bags/>} />
+         <Route path='/buds' element={<Buds/>} />
+         <Route path='/bluetoothSpeakers' element={<BluetoothSpeakers/>} />
+         <Route path='/smartwatch' element={<Smartwatch/>} />
+         <Route path='/graphicscards' element={<GraphicsCards/>} />
+         <Route path="/bluetooth" element={<Bluetooth />} />
+
+          <Route path="/search/:query" element={<SearchResults />} />
       </Routes>
 
       {/* Footer will show on every page */}
       <Footer />
+      <ToastContainer/>
     </>
   );
 }

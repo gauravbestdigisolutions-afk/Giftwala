@@ -1,60 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Yahan login logic add karein, jaise API call
-    console.log('Email:', email);
-    console.log('Password:', password);
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:4000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "Login failed. Please register first!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        setTimeout(() => {
+          navigate("/register"); // redirect to register page
+        }, 3000); // wait for toast to show
+        setLoading(false);
+        return;
+      }
+
+      // Store token and user info in localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      toast.success("Login successful!", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+
+      setLoading(false);
+      navigate("/"); // Redirect to home page
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong", { position: "top-right", autoClose: 3000 });
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4 shadow-sm" style={{ width: '400px' }}>
-        <h3 className="text-center mb-4">Login to MyShop</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label fw-semibold">Email address</label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label fw-semibold">Password</label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div className="form-check">
-              <input className="form-check-input" type="checkbox" id="rememberMe" />
-              <label className="form-check-label" htmlFor="rememberMe">
-                Remember me
-              </label>
-            </div>
-            <a href="/forgot" className="text-primary">Forgot Password?</a>
-          </div>
-          <button type="submit" className="btn btn-primary w-100">Login</button>
-        </form>
-        <p className="text-center mt-3">
-          Don't have an account? <a href="/register" className="text-primary">Sign Up</a>
-        </p>
-      </div>
+    <div className="container my-5" style={{ maxWidth: "400px" }}>
+      <h2 className="mb-4">Login</h2>
+
+      <form onSubmit={handleLogin}>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
+
+      {/* Toast container */}
+      <ToastContainer />
     </div>
   );
 };

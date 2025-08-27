@@ -1,118 +1,169 @@
-import React, { useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import About from "./About";
 import HeroSection from "../Components/HeroSection";
-
-// Import local images from assets
-import img1 from "../assets/prodcut/image1.png";
-import img2 from "../assets/prodcut/image2.png";
-import img3 from "../assets/prodcut/image3.png";
-import img4 from "../assets/prodcut/image4.png";
-import img5 from "../assets/prodcut/image5.png";
-import img6 from "../assets/prodcut/image6.png";
-import img7 from "../assets/prodcut/image7.png";
-import img8 from "../assets/prodcut/image8.png";
-import img9 from "../assets/prodcut/image9.png";
-import Electronic from "./Electronic";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [likedProducts, setLikedProducts] = useState({});
   const scrollRef = useRef(null);
 
-  // Local image-based product list
-  const products = [
-    { title: "Notebook", price: "₹29.99", img: img1 },
-    { title: "Parker Classic Stainless Steel Ct - Ball Pen", price: "₹39.99", img: img2 },
-    { title: "Embroidered Cap - Black", price: "₹19.99", img: img3 },
-    { title: "White Formal Shirt", price: "₹49.99", img: img4 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img5 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img6 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img7 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img8 },
-    { title: "Diary & Pen Combo", price: "₹59.99", img: img9 },
-  ];
+  // Fetch products
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/api/products/product");
+      const data = await res.json();
+      const bottleProducts = data.filter(
+        (product) => product.category.toLowerCase() === "bootle"
+      );
+      setProducts(bottleProducts);
 
-  const scroll = (direction) => {
-    if (direction === "left") {
-      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
-    } else {
-      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+      // Load wishlist from localStorage
+      const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const liked = {};
+      storedWishlist.forEach((p) => (liked[p._id] = true));
+      setLikedProducts(liked);
+    } catch (err) {
+      console.error("Error fetching products:", err);
     }
   };
 
-  const handleBuyNow = () => {
-    navigate("/customnext");
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleBuyNow = (product) => {
+    navigate("/customnext", { state: { product } });
+  };
+
+  // Toggle like / wishlist
+  const toggleLike = (product) => {
+    setLikedProducts((prev) => {
+      const newLiked = { ...prev, [product._id]: !prev[product._id] };
+
+      // Update localStorage
+      const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      if (newLiked[product._id]) {
+        if (!storedWishlist.find((p) => p._id === product._id)) {
+          storedWishlist.push(product);
+        }
+      } else {
+        const index = storedWishlist.findIndex((p) => p._id === product._id);
+        if (index > -1) storedWishlist.splice(index, 1);
+      }
+      localStorage.setItem("wishlist", JSON.stringify(storedWishlist));
+
+      return newLiked;
+    });
+  };
+
+  const scrollLeft = () => {
+    scrollRef.current.scrollBy({ left: -scrollRef.current.offsetWidth, behavior: "smooth" });
+  };
+
+  const scrollRight = () => {
+    scrollRef.current.scrollBy({ left: scrollRef.current.offsetWidth, behavior: "smooth" });
   };
 
   return (
     <>
       <HeroSection />
-
       <div className="container my-5">
-        <h2 className="mb-4 fw-bold text-center">Popular Products</h2>
+        <h2 className="mb-4 fw-bold text-center">Bottle Products</h2>
 
         <div className="position-relative">
-          {/* Left Scroll Button */}
+          {/* Left Arrow */}
           <button
-            className="btn position-absolute top-50 start-0 translate-middle-y"
-            style={{ zIndex: 10, backgroundColor: "#ff6b6b", color: "#fff", border: "none" }}
-            onClick={() => scroll("left")}
+            className="btn btn-dark position-absolute top-50 start-0 translate-middle-y"
+            style={{ zIndex: 10, opacity: 0.8 }}
+            onClick={scrollLeft}
           >
             &#8249;
           </button>
 
-          {/* Right Scroll Button */}
-          <button
-            className="btn position-absolute top-50 end-0 translate-middle-y"
-            style={{ zIndex: 10, backgroundColor: "#ff6b6b", color: "#fff", border: "none" }}
-            onClick={() => scroll("right")}
-          >
-            &#8250;
-          </button>
-
-          {/* Scrollable Product Cards */}
+          {/* Products Slider */}
           <div
+            className="d-flex gap-3 py-2 overflow-auto hide-scrollbar"
             ref={scrollRef}
-            className="d-flex gap-3 overflow-auto py-2"
-            style={{
-              scrollBehavior: "smooth",
-              padding: "0 50px",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
+            style={{ scrollBehavior: "smooth" }}
           >
-            {/* Hide scrollbar for Chrome/Safari */}
-            <style>
-              {`
-              div::-webkit-scrollbar {
-                display: none;
-              }
-              `}
-            </style>
+            {products.map((product) => (
+              <div
+                key={product._id}
+                className="card flex-shrink-0 border-0 shadow-sm position-relative product-card"
+              >
+                {/* Heart Icon */}
+                <div
+                  className="position-absolute"
+                  style={{
+                    top: "10px",
+                    right: "10px",
+                    cursor: "pointer",
+                    fontSize: "1.5rem",
+                    zIndex: 10,
+                  }}
+                  onClick={() => toggleLike(product)}
+                >
+                  {likedProducts[product._id] ? (
+                    <FaHeart color="red" />
+                  ) : (
+                    <FaRegHeart color="grey" />
+                  )}
+                </div>
 
-            {products.map((product, index) => (
-              <div key={index} className="card flex-shrink-0" style={{ width: "300px" }}>
-                <img src={product.img} className="card-img-top" alt={product.title} />
+                {/* Product Image */}
+                <img
+                  src={product.images[0]}
+                  className="card-img-top"
+                  alt={product.name}
+                  style={{
+                    height: "200px",
+                    objectFit: "contain",
+                    borderRadius: "10px",
+                  }}
+                />
+
                 <div className="card-body text-center">
-                  <h5 className="card-title">{product.title}</h5>
-                  <p className="card-text text-primary fw-bold">{product.price}</p>
-                  <button onClick={handleBuyNow} className="btn btn-primary">
+                  <h5 className="card-title">{product.name}</h5>
+                  <p className="card-text text-primary fw-bold">₹{product.price}</p>
+                  <button
+                    onClick={() => handleBuyNow(product)}
+                    className="btn btn-primary"
+                  >
                     Buy Now
                   </button>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Right Arrow */}
+          <button
+            className="btn btn-dark position-absolute top-50 end-0 translate-middle-y"
+            style={{ zIndex: 10, opacity: 0.8 }}
+            onClick={scrollRight}
+          >
+            &#8250;
+          </button>
         </div>
 
-       
-
-
-
-        {/* About Section */}
         <About />
       </div>
+
+      {/* CSS for responsive card widths */}
+      <style>
+        {`
+          .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+          .product-card { width: 23%; }
+
+          @media (max-width: 992px) { .product-card { width: 48% !important; } }
+          @media (max-width: 768px) { .product-card { width: 90% !important; } }
+        `}
+      </style>
     </>
   );
 };

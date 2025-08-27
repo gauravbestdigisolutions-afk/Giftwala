@@ -1,57 +1,133 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom"; // ← for breadcrumb navigation
-import img1 from "../assets/prodcut/image1.png";
+import React, { useState, useEffect } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useProductContext } from "../context/ProductContext"; // user context
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CustomNext = () => {
-  const [quantity, setQuantity] = useState(1);
-  const [coverOption, setCoverOption] = useState("Matching cover (+ ₹25)");
-  const [pageOption, setPageOption] = useState("Unruled inside pages (+ ₹0)");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { product } = location.state || {};
+  const { user } = useProductContext(); // get logged in user
 
-  const handleIncrease = () => setQuantity(quantity + 1);
-  const handleDecrease = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
+  if (!product) return <p>No product selected!</p>;
+
+  const [quantity, setQuantity] = useState(
+    Number(localStorage.getItem(`quantity_${product._id}`)) || 1
+  );
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [mainImage, setMainImage] = useState(product.images[0]);
+
+  useEffect(() => {
+    if (product) {
+      const savedQty = Number(localStorage.getItem(`quantity_${product._id}`)) || 1;
+      setQuantity(savedQty);
+      setMainImage(product.images[0]);
+    }
+
+    const fetchRelatedProducts = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/api/products/product");
+        const data = await res.json();
+        const related = data.filter(
+          (p) => p.category === product.category && p._id !== product._id
+        );
+        setRelatedProducts(related);
+      } catch (err) {
+        console.error("Error fetching related products:", err);
+      }
+    };
+    fetchRelatedProducts();
+  }, [product]);
+
+  const handleIncrease = () => {
+    setQuantity((prev) => {
+      const newQty = prev + 1;
+      localStorage.setItem(`quantity_${product._id}`, newQty);
+      return newQty;
+    });
   };
+
+  const handleDecrease = () => {
+    setQuantity((prev) => {
+      const newQty = prev > 1 ? prev - 1 : 1;
+      localStorage.setItem(`quantity_${product._id}`, newQty);
+      return newQty;
+    });
+  };
+
+  const handleAddToCart = () => {
+    if (!user) {
+      toast.warning("Please login first!", { position: "top-center" });
+      navigate("/login"); // Redirect to login page
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingIndex = cart.findIndex((item) => item._id === product._id);
+
+    if (existingIndex > -1) {
+      cart[existingIndex].quantity += quantity;
+    } else {
+      cart.push({ ...product, quantity });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    toast.success(`${product.name} added to cart!`, { position: "top-center" });
+    navigate("/cart"); // optional: go to cart page
+  };
+
+  const handleBuyRelated = (p) => {
+    navigate("/customnext", { state: { product: p } });
+  };
+
+  const totalPrice = product.price * quantity;
 
   return (
     <div className="container my-5">
-      {/* Breadcrumb / Home link */}
-      <div className="mb-3">
+      {/* Breadcrumb */}
+      <div className="mb-4">
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Notebook
-            </li>
+            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+            <li className="breadcrumb-item active" aria-current="page">{product.name}</li>
           </ol>
         </nav>
       </div>
 
-      <div className="row">
-        {/* Left: Product Image */}
+      {/* Main Product */}
+      <div className="row mb-5">
         <div className="col-12 col-md-6 mb-4">
           <img
-            src={img1}
-            alt="Notebook"
-            className="img-fluid rounded shadow"
+            src={mainImage}
+            alt={product.name}
+            className="img-fluid rounded shadow mb-3"
+            style={{ maxHeight: "400px", objectFit: "contain", width: "100%" }}
           />
+          <div className="d-flex gap-2">
+            {product.images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`thumb-${idx}`}
+                className="img-fluid rounded border"
+                style={{
+                  width: "22%",
+                  height: "70px",
+                  objectFit: "contain",
+                  cursor: "pointer",
+                  border: mainImage === img ? "2px solid #007bff" : "1px solid #ddd",
+                }}
+                onClick={() => setMainImage(img)}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Right: Product Info */}
         <div className="col-12 col-md-6">
-          <h2 className="fw-bold mb-3">Notebook</h2>
-
-          {/* Price */}
-          <div className="mb-3">
-            <span className="h4 text-primary fw-bold me-3">₹ 299</span>
-            <span className="text-muted text-decoration-line-through me-2">₹ 350</span>
-            <span className="text-danger fw-semibold">(15% Off)</span>
-          </div>
-
-          <p className="mb-1"><strong>The minimum quantity:</strong> 1</p>
-          <p className="mb-3"><strong>0 bought this last month</strong></p>
+          <h2 className="fw-bold mb-3">{product.name}</h2>
+          <p className="mb-3">{product.description || "No description available."}</p>
+          <h4 className="text-primary fw-bold mb-3">₹{totalPrice}</h4>
 
           {/* Quantity Selector */}
           <div className="d-flex align-items-center mb-3">
@@ -60,87 +136,37 @@ const CustomNext = () => {
             <button className="btn btn-outline-primary" onClick={handleIncrease}>+</button>
           </div>
 
-          {/* Product Add-ons */}
-          <div className="mb-3">
-            <h5 className="fw-semibold">Product Add-on</h5>
-            <div className="form-check">
-              <input 
-                type="radio" 
-                name="cover" 
-                value="Matching cover (+ ₹25)"
-                checked={coverOption === "Matching cover (+ ₹25)"}
-                onChange={(e) => setCoverOption(e.target.value)}
-                className="form-check-input" 
-                id="matchingCover"
-              />
-              <label className="form-check-label" htmlFor="matchingCover">Matching cover (+ ₹25)</label>
-            </div>
-            <div className="form-check">
-              <input 
-                type="radio" 
-                name="cover" 
-                value="Plain cover (+ ₹0)"
-                checked={coverOption === "Plain cover (+ ₹0)"}
-                onChange={(e) => setCoverOption(e.target.value)}
-                className="form-check-input" 
-                id="plainCover"
-              />
-              <label className="form-check-label" htmlFor="plainCover">Plain cover (+ ₹0)</label>
-            </div>
-            <div className="form-check">
-              <input 
-                type="radio" 
-                name="cover" 
-                value="Standard cover (+ ₹25)"
-                checked={coverOption === "Standard cover (+ ₹25)"}
-                onChange={(e) => setCoverOption(e.target.value)}
-                className="form-check-input" 
-                id="standardCover"
-              />
-              <label className="form-check-label" htmlFor="standardCover">Standard cover (+ ₹25)</label>
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <h5 className="fw-semibold">Page Add-ons</h5>
-            <div className="form-check">
-              <input 
-                type="radio" 
-                name="pages" 
-                value="Unruled inside pages (+ ₹0)"
-                checked={pageOption === "Unruled inside pages (+ ₹0)"}
-                onChange={(e) => setPageOption(e.target.value)}
-                className="form-check-input" 
-                id="unruledPages"
-              />
-              <label className="form-check-label" htmlFor="unruledPages">Unruled inside pages (+ ₹0)</label>
-            </div>
-            <div className="form-check">
-              <input 
-                type="radio" 
-                name="pages" 
-                value="Ruled inside pages (+ ₹26)"
-                checked={pageOption === "Ruled inside pages (+ ₹26)"}
-                onChange={(e) => setPageOption(e.target.value)}
-                className="form-check-input" 
-                id="ruledPages"
-              />
-              <label className="form-check-label" htmlFor="ruledPages">Ruled inside pages (+ ₹26)</label>
-            </div>
-          </div>
-
-          <button className="btn btn-primary btn-lg mb-3">Customize Now</button>
-
-          <div>
-            <strong>Choose one from our design</strong>
-            <div className="d-flex gap-3 mt-2">
-              <div className="border p-3 rounded text-center">Design 1</div>
-              <div className="border p-3 rounded text-center">Design 2</div>
-              <div className="border p-3 rounded text-center">Design 3</div>
-            </div>
-          </div>
+          <button className="btn btn-primary btn-lg" onClick={handleAddToCart}>
+            Add to Cart
+          </button>
         </div>
       </div>
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <div className="mb-5">
+          <h4 className="fw-bold mb-3">Related Products</h4>
+          <div className="d-flex gap-3 overflow-auto py-2" style={{ scrollBehavior: "smooth" }}>
+            {relatedProducts.map((p) => (
+              <div key={p._id} className="card flex-shrink-0 border-0 shadow-sm" style={{ width: "200px" }}>
+                <img
+                  src={p.images[0]}
+                  alt={p.name}
+                  className="card-img-top"
+                  style={{ height: "150px", objectFit: "contain", borderRadius: "10px" }}
+                />
+                <div className="card-body text-center">
+                  <h6 className="card-title">{p.name}</h6>
+                  <p className="text-primary fw-bold">₹{p.price}</p>
+                  <button className="btn btn-sm btn-primary" onClick={() => handleBuyRelated(p)}>
+                    View Product
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

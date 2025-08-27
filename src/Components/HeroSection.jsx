@@ -29,10 +29,7 @@ const HeroSection = () => {
                   className="d-block w-100 hero-banner"
                   alt="Slide 1"
                 />
-                <div className="carousel-caption d-none d-md-block">
-                  <h2 className="fw-bold">Welcome to MyShop</h2>
-                  <p>Best products at amazing prices</p>
-                </div>
+              
               </div>
 
               {/* Slide 2 */}

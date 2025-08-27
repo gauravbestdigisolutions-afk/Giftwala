@@ -32,6 +32,7 @@ p {
   font-size: 14px;
 }
 
+
 /* ✅ Responsive: Remove bottom gap on mobile */
 @media (max-width: 768px) {
   .features-container {
@@ -196,4 +197,9 @@ p, li {
     object-fit: cover; /* ensure image covers container */
     width: 100%;
   }
+}
+
+
+.gap-3{
+  gap:0rem!important;
 }
