@@ -16,7 +16,7 @@ export const ProductProvider = ({ children }) => {
   // Fetch all products
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/products/product");
+      const res = await fetch("https://gitbala-backend-2.onrender.com/api/products/product");
       const data = await res.json();
       if (Array.isArray(data)) setProducts(data);
       else if (data.products) setProducts(data.products);
@@ -29,7 +29,7 @@ export const ProductProvider = ({ children }) => {
   // Fetch products by category
   const fetchProductsByCategory = async (category) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/products/category/${category}`);
+      const res = await fetch(`https://gitbala-backend-2.onrender.com/api/products/category/${category}`);
       const data = await res.json();
       if (Array.isArray(data)) setProducts(data);
       else if (data.products) setProducts(data.products);
@@ -52,7 +52,7 @@ export const ProductProvider = ({ children }) => {
   // User login
   const loginUser = async (email, password) => {
     try {
-      const res = await fetch("http://localhost:4000/api/auth/login", {
+      const res = await fetch("https://gitbala-backend-2.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -72,7 +72,7 @@ export const ProductProvider = ({ children }) => {
   // User register
   const registerUser = async (userData) => {
     try {
-      const res = await fetch("http://localhost:4000/api/auth/register", {
+      const res = await fetch("https://gitbala-backend-2.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),

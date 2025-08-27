@@ -27,7 +27,7 @@ const CustomNext = () => {
 
     const fetchRelatedProducts = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/products/product");
+        const res = await fetch("https://gitbala-backend-2.onrender.com/api/products/product");
         const data = await res.json();
         const related = data.filter(
           (p) => p.category === product.category && p._id !== product._id

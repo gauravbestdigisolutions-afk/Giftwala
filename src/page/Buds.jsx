@@ -8,7 +8,7 @@ const Buds = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/products/product");
+        const res = await fetch("https://gitbala-backend-2.onrender.com/api/products/product");
         const data = await res.json();
 
         // Buds category ke sabhi products (case-insensitive)
