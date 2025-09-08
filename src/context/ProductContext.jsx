@@ -5,22 +5,33 @@ const ProductContext = createContext();
 
 // 2️⃣ Provider component
 export const ProductProvider = ({ children }) => {
-  const [products, setProducts] = useState([]); 
-  const [selectedCategory, setSelectedCategory] = useState("all"); 
-  const [cart, setCart] = useState([]); 
+  const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  // Cart ko localStorage se initialize karo
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // User ko localStorage se initialize karo
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
+  // Cart ko localStorage me save karo jab bhi update ho
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   // Fetch all products
   const fetchProducts = async () => {
     try {
-      const res = await fetch("https://gitbala-backend-2.onrender.com/api/products/product");
+      const res = await fetch("http://localhost:4000/api/products/product");
       const data = await res.json();
       if (Array.isArray(data)) setProducts(data);
       else if (data.products) setProducts(data.products);
-      else console.error("Unexpected response format:", data);
     } catch (err) {
       console.error("Error fetching products:", err);
     }
@@ -29,11 +40,12 @@ export const ProductProvider = ({ children }) => {
   // Fetch products by category
   const fetchProductsByCategory = async (category) => {
     try {
-      const res = await fetch(`https://gitbala-backend-2.onrender.com/api/products/category/${category}`);
+      const res = await fetch(
+        `http://localhost:4000/api/products/category/${category}`
+      );
       const data = await res.json();
       if (Array.isArray(data)) setProducts(data);
       else if (data.products) setProducts(data.products);
-      else console.error("Unexpected response format:", data);
     } catch (err) {
       console.error(`Error fetching products for category ${category}:`, err);
     }
@@ -52,7 +64,7 @@ export const ProductProvider = ({ children }) => {
   // User login
   const loginUser = async (email, password) => {
     try {
-      const res = await fetch("https://gitbala-backend-2.onrender.com/api/auth/login", {
+      const res = await fetch("http://localhost:4000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -72,7 +84,7 @@ export const ProductProvider = ({ children }) => {
   // User register
   const registerUser = async (userData) => {
     try {
-      const res = await fetch("https://gitbala-backend-2.onrender.com/api/auth/register", {
+      const res = await fetch("http://localhost:4000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -92,8 +104,59 @@ export const ProductProvider = ({ children }) => {
   // Logout
   const logoutUser = () => {
     setUser(null);
+    setCart([]); // Logout par cart clear kar do
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("cart");
+  };
+
+  // 🛒 Add to Cart
+  const addToCart = async (product) => {
+    if (!user) {
+      alert("Please login first to add items to cart");
+      return;
+    }
+    try {
+      const res = await fetch("http://localhost:4000/api/cart/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          userId: user._id,
+          productId: product._id,
+          productName: product.name,
+          price: product.price,
+          quantity: 1,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) setCart((prev) => [...prev, data.item]);
+      else alert(data.error || "Failed to add to cart");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    }
+  };
+
+  // 🛒 Fetch Cart from backend
+  const fetchCart = async () => {
+    if (!user?._id) return;
+    try {
+      const res = await fetch(`http://localhost:4000/api/cart/cart/${user._id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch cart");
+      const data = await res.json();
+      const items = data.items || data.cart || [];
+      setCart(items);
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+      setCart([]);
+    }
   };
 
   return (
@@ -110,6 +173,8 @@ export const ProductProvider = ({ children }) => {
         fetchProducts,
         fetchProductsByCategory,
         filterByCategory,
+        addToCart,
+        fetchCart,
       }}
     >
       {children}

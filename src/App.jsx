@@ -24,6 +24,9 @@ import Register from './page/Register';
 import BluetoothSpeakers from './page/BluetoothSpeakers';
 import Smartwatch from './page/Smartwatch';
 import GraphicsCards from './page/GraphicsCards';
+import Faq from './page/Faq';
+import TermAndCondition from './page/TermAndCondition';
+import Profile from './page/Profile';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -52,7 +55,11 @@ function App() {
          <Route path='/bluetoothSpeakers' element={<BluetoothSpeakers/>} />
          <Route path='/smartwatch' element={<Smartwatch/>} />
          <Route path='/graphicscards' element={<GraphicsCards/>} />
+         <Route path='/faq' element={<Faq/>} />
+         <Route path='/terms-and-conditions' element={<TermAndCondition/>} />
          <Route path="/bluetooth" element={<Bluetooth />} />
+         <Route path="/check-out" element={<CheckOut />} />
+         <Route path="/profile" element={<Profile/>} />
 
           <Route path="/search/:query" element={<SearchResults />} />
       </Routes>

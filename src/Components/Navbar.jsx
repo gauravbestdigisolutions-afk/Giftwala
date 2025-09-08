@@ -11,7 +11,8 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, logoutUser } = useProductContext();
+
+  const { user, logoutUser, cart } = useProductContext(); // ✅ cart added
 
   const categories = [
     { name: "Custom Printed T-Shirts", items: ["Electronic", "kitchen"] },
@@ -79,10 +80,16 @@ const Navbar = () => {
 
             {/* Icons */}
             <div className="d-flex align-items-center gap-3 position-relative">
+              {/* ✅ Cart with dynamic count */}
               <Link to="/cart" className="nav-link position-relative text-dark p-0">
                 <FaShoppingCart size={22} />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
+                {cart.length > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {cart.length}
+                  </span>
+                )}
               </Link>
+
               <Link to="/wishlist"><FaRegHeart size={20} /></Link>
 
               {/* User/Profile */}

@@ -37,7 +37,7 @@ const Footer = () => {
             <h5 className="fw-bold">Customer Service</h5>
             <ul className="list-unstyled">
               <li><a href="/faq" className="text-white text-decoration-none">FAQ</a></li>
-              <li><a href="/shipping" className="text-white text-decoration-none">Shipping & Returns</a></li>
+              <li><a href="/terms-and-conditions" className="text-white text-decoration-none">Shipping & Returns</a></li>
               <li><a href="/support" className="text-white text-decoration-none">Support</a></li>
             </ul>
           </div>
